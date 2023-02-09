@@ -1,5 +1,5 @@
 // Enunciado:
-// Programa Master Mind for Beginners 
+// Realizar un programa C++ que lea un número real (correspondiente a un monto) y convertir este monto a palabra.
 //
 // Participantes:
 // 1- John Luis Del Rosario Sánchez - ID 1106940
@@ -31,7 +31,7 @@ bool ValidarNumero(string str)// metodo para comprobar si el dato introducido es
 			continue;
 		}
 
-		if (isdigit(str[i]) == false || dotCount > 1) // compara cada caracter de la cadena para saber si es numerico
+		if (isdigit(str[i]) == false || dotCount > 1 || (str[i] == '.' && i == str.length() - 1)) // compara cada caracter de la cadena para saber si es numerico
 		{
 			return false;
 		}
@@ -130,10 +130,16 @@ int main()
 		}
 		else {
 			numEntero = num;
+		}
+		
+		if (centavos == "" && num.find('.') != string::npos) {
+			cout << "Parte decimal vacia" << endl;
+			continue;
+		}
+		else if (centavos == "") {
 			centavos = "00";
 		}
-
-		if (centavos.length() > 2) { //si se agregaron mas de dos decimales
+		else if (centavos.length() > 2) { //si se agregaron mas de dos decimales
 			cout << "Parte decimal fuera de rango, solo inserte dos numeros decimales" << endl;
 			continue;
 		}
@@ -186,5 +192,4 @@ int main()
 		cout << endText;
 		break;
 	}
-
 }
