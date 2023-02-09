@@ -63,27 +63,31 @@ string NumeroAPalabra(string num, string group) {
 		}
 
 		if (i == 1) { //caso para las decenas
-			//caso para "diez"
-			if (num[i] == '1' && num[i + 1] == '0') {
-				return numeroTexto += diez[0];
-			}
-			//caso para "once", "doce", etc.
-			else if (num[i] == '1' && num[i + 1] != '0') {
-				return numeroTexto += diez[int(num[i + 1]) - 48];
-			}
-
-			//caso para 21 en 
-			if (num[i] == '2' && num[i + 1] == '1' && group == "centena") { //caso veintiuno
-				return numeroTexto += veinte[1];
-			}
-			else if (num[i] == '2' && num[i + 1] == '1') { // caso veintiun
-				return numeroTexto += veinte[0];
-			}
-			else if (num[i] == '2' && num[i + 1] != '0') { //veintiuno, veintidos...
-				return numeroTexto += veinte[int(num[i + 1]) - 48];
+			if (num[i] == '1') {
+				//caso para "diez"
+				if (num[i + 1] == '0') {
+					return numeroTexto += diez[0];
+				}
+				//caso para "once", "doce", etc.
+				else if (num[i + 1] != '0') {
+					return numeroTexto += diez[int(num[i + 1]) - 48];
+				}
 			}
 
-			if (num[i] != '2' && num[i + 1] != '0') { //decenas mayores que 2
+
+			if (num[i] == '2') {
+				if (group == "centena" && num[i + 1] == '1') { //caso veintiuno
+					return numeroTexto += veinte[1];
+				}
+				else if(num[i + 1] == '1') { // caso veintiun
+					return numeroTexto += veinte[0];
+				}
+				else if (num[i + 1] != '0') { //veintiuno, veintidos...
+					return numeroTexto += veinte[int(num[i + 1]) - 48];
+				}
+			}
+
+			if (num[i + 1] != '0') { //decenas mayores que 2
 				numeroTexto += decenasRestantes[pos - 2] + " y ";
 			}
 			else { //caso para veinte
@@ -93,16 +97,20 @@ string NumeroAPalabra(string num, string group) {
 		}
 
 		if (i == 2) { //caso para las unidades
-			if (group == "centena" && num[i] == '1') { //cuando esta en formato unidad y no en el grupo de miles ni millones
-				numeroTexto += unidades[pos];
+			if (num[i] == '1') {
+				if (group == "centena") {  //cuando esta en formato unidad y no en el grupo de miles ni millones
+					numeroTexto += unidades[pos];
+				}
+				else { //para los casos de "un"
+					numeroTexto += unidades[pos - 1];
+				}
 			}
-			if (group == "mil" && num[i] == '1' && num[i-1] == '0' && num[i - 2] == '0') { //del 1000 al 1999
+
+			if (group == "mil" && num[i] == '1' && num[i - 1] == '0' && num[i - 2] == '0') { //del 1000 al 1999
 				return "";
 			}
-			else if (num[i] == '1' && group != "centena") { //para los casos de "un"
-				numeroTexto += unidades[pos - 1];
-			}
-			else if (num[i] != '0') { //grupo de unidades sin ningun caso especial
+
+			if (num[i] != '0') { //grupo de unidades sin ningun caso especial
 				numeroTexto += unidades[pos];
 			}
 		}
@@ -127,16 +135,16 @@ int main()
 		if (num.find('.') != string::npos) { //si existe el punto en el string
 			numEntero = num.substr(0, num.find('.'));
 			centavos = num.substr(num.find('.') + 1, num.length() - 1);
+			if (centavos == "") {
+				cout << "Parte decimal vacia" << endl;
+				continue;
+			}
 		}
 		else {
 			numEntero = num;
 		}
-		
-		if (centavos == "" && num.find('.') != string::npos) {
-			cout << "Parte decimal vacia" << endl;
-			continue;
-		}
-		else if (centavos == "") {
+
+		if (centavos == "") {
 			centavos = "00";
 		}
 		else if (centavos.length() > 2) { //si se agregaron mas de dos decimales
@@ -183,7 +191,7 @@ int main()
 			}
 			subNum += numEntero[i]; //agregar el digito actual a subNum
 		}
-		
+
 		endText = endText + "con " + centavos[0] + centavos[1] + " centavos"; // agregar la parte de los centavos al mensaje final
 		if (endText[0] == ' ') {
 			endText.erase(0, 1);
