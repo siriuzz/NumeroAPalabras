@@ -45,7 +45,6 @@ string NumeroAPalabra(string num, string group) {
 	string numeroTexto;
 
 	if (num.length() == 0) return " ";
-	while (num.length() < 3) num = '0' + num;
 
 	for (int i = 0; i < num.length(); i++) {
 		int pos = int(num[i]) - 48;
@@ -57,11 +56,7 @@ string NumeroAPalabra(string num, string group) {
 			if (num[i] == '1' && num[i + 1] == '0' && num[i + 2] == '0') {
 				return numeroTexto += centenas[0];
 			}
-			//caso para "ciento"
-			else if (num[i] == '1') {
-				numeroTexto += centenas[pos] + " ";
-			}
-			//centenas diferente de 100
+			//caso para "ciento y centenas diferente de "cien"
 			else {
 				numeroTexto += centenas[pos] + " ";
 			}
@@ -78,36 +73,36 @@ string NumeroAPalabra(string num, string group) {
 			}
 
 			//caso para 21 en 
-			if (num[i] == '2' && num[i + 1] == '1' && group == "centena") {
+			if (num[i] == '2' && num[i + 1] == '1' && group == "centena") { //caso veintiuno
 				return numeroTexto += veinte[1];
 			}
-			else if (num[i] == '2' && num[i + 1] == '1') {
+			else if (num[i] == '2' && num[i + 1] == '1') { // caso veintiun
 				return numeroTexto += veinte[0];
 			}
-			else if (num[i] == '2' && num[i + 1] != '0') {
+			else if (num[i] == '2' && num[i + 1] != '0') { //veintiuno, veintidos...
 				return numeroTexto += veinte[int(num[i + 1]) - 48];
 			}
-			else if (num[i] == '2' && num[i + 1] == '0') {
-				return numeroTexto += decenasRestantes[0];
-			}
 
-			if (num[i + 1] != '0' && num[i] != '2') {
+			if (num[i] != '2' && num[i + 1] != '0') { //decenas mayores que 2
 				numeroTexto += decenasRestantes[pos - 2] + " y ";
 			}
-			else {
+			else { //caso para veinte
 				return numeroTexto += decenasRestantes[pos - 2];
 			}
 
 		}
 
 		if (i == 2) { //caso para las unidades
-			if (group == "centena" && num[i] == '1') {
+			if (group == "centena" && num[i] == '1') { //cuando esta en formato unidad y no en el grupo de miles ni millones
 				numeroTexto += unidades[pos];
 			}
-			else if (num[i] == '1' && group != "centena") {
+			if (group == "mil" && num[i] == '1' && num[i-1] == '0' && num[i - 2] == '0') { //del 1000 al 1999
+				return "";
+			}
+			else if (num[i] == '1' && group != "centena") { //para los casos de "un"
 				numeroTexto += unidades[pos - 1];
 			}
-			else if (num[i] != '0') {
+			else if (num[i] != '0') { //grupo de unidades sin ningun caso especial
 				numeroTexto += unidades[pos];
 			}
 		}
@@ -135,13 +130,10 @@ int main()
 		}
 		else {
 			numEntero = num;
+			centavos = "00";
 		}
 
-		if (centavos == "") { //si la parte decimal esta vacia
-			//se agregan los ceros
-			centavos += "00";
-		}
-		else if (centavos.length() > 2) { //si se agregaron mas de dos decimales
+		if (centavos.length() > 2) { //si se agregaron mas de dos decimales
 			cout << "Parte decimal fuera de rango, solo inserte dos numeros decimales" << endl;
 			continue;
 		}
@@ -165,30 +157,32 @@ int main()
 			if (subNum.length() == 3 && subNum != "000") { //cuando se han seleccionado 3 digitos
 				if (pos == 0) {//posiciones para las unidades, decenas y centenas
 					endText += NumeroAPalabra(subNum, "centena") + " ";
-					subNum = "";
 				}
 
 				if (pos == 3) { //posiciones para los miles 
 					endText += NumeroAPalabra(subNum, "mil") + " mil ";
-					subNum = "";
 				}
 
 				if (pos == 6) { //posiciones para los millones
 					endText += NumeroAPalabra(subNum, "millon");
-					if (subNum[2] == '1' && subNum[1] == '0' && subNum[0] == '0') {
+					if (subNum[2] == '1' && subNum[1] == '0' && subNum[0] == '0') { //caso para "un millon"
 						endText += " millon ";
 					}
 					else {
 						endText += " millones ";
-
 					}
-					subNum = "";
 				}
+				subNum = "";
+
 			}
 			subNum += numEntero[i]; //agregar el digito actual a subNum
 		}
+		
 		endText = endText + "con " + centavos[0] + centavos[1] + " centavos"; // agregar la parte de los centavos al mensaje final
-		endText[0] = toupper(endText[0]);
+		if (endText[0] == ' ') {
+			endText.erase(0, 1);
+		}
+		endText[0] = toupper(endText[0]); //primer caracter en mayuscula
 		cout << endText;
 		break;
 	}
