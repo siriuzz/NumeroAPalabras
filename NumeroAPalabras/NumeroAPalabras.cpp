@@ -1,12 +1,16 @@
 // Enunciado:
 // Realizar un programa C++ que lea un número real (correspondiente a un monto) y convertir este monto a palabra.
-//
+// 
 // Participantes:
 // 1- John Luis Del Rosario Sánchez - ID 1106940
 // 2- Ashly Marisell Paula Ynoa - ID 1108023
 // 3- Elián Matos Díaz - ID 1106901
 // 4- Juan Daniel Ubiera Méndez - ID 1107248
 // 5- Kelvin Arístides García Espinal - ID 1107646
+// 
+// Fecha de entrega: 9/2/2023
+// 
+// Profesor: Casimiro Cordero
 
 #include <iostream>
 #include <string>
@@ -14,7 +18,7 @@
 using namespace std;
 
 string centenas[10] = { "cien","ciento","doscientos","trescientos","cuatrocientos","quinientos","seiscientos","setecientos","ochocientos","novecientos" },
-diez[10] = { "diez", "once", "doce", "trece", "catorce", "quince","dieciséis","diecisiete","dieciocho","diecinueve" },
+diez[10] = { "diez", "once", "doce", "trece", "catorce", "quince","dieciseis","diecisiete","dieciocho","diecinueve" },
 veinte[10] = { "veintiun","veintiuno","veintidos","veintitres","veinticuatro","veinticinco","veintiseis","veintisiete","veintiocho","veintinueve" },
 decenasRestantes[8] = { "veinte","treinta","cuarenta","cincuenta","sesenta","setenta","ochenta","noventa" },
 unidades[10] = { "un","uno","dos","tres","cuatro","cinco","seis","siete","ocho","nueve" };
@@ -97,21 +101,21 @@ string NumeroAPalabra(string num, string group) {
 		}
 
 		if (i == 2) { //caso para las unidades
-			if (num[i] == '1') {
-				if (group == "centena") {  //cuando esta en formato unidad y no en el grupo de miles ni millones
-					numeroTexto += unidades[pos];
-				}
-				else { //para los casos de "un"
-					numeroTexto += unidades[pos - 1];
-				}
-			}
-
 			if (group == "mil" && num[i] == '1' && num[i - 1] == '0' && num[i - 2] == '0') { //del 1000 al 1999
 				return "";
 			}
 
+			if (num[i] == '1') {
+				if (group == "centena") {  //cuando esta en formato unidad y no en el grupo de miles ni millones
+					return numeroTexto += unidades[pos];
+				}
+				else { //para los casos de "un"
+					return numeroTexto += unidades[pos - 1];
+				}
+			}
+
 			if (num[i] != '0') { //grupo de unidades sin ningun caso especial
-				numeroTexto += unidades[pos];
+				return numeroTexto += unidades[pos];
 			}
 		}
 	}
@@ -171,10 +175,12 @@ int main()
 			if (subNum.length() == 3 && subNum != "000") { //cuando se han seleccionado 3 digitos
 				if (pos == 0) {//posiciones para las unidades, decenas y centenas
 					endText += NumeroAPalabra(subNum, "centena") + " ";
+					subNum = "";
 				}
 
 				if (pos == 3) { //posiciones para los miles 
 					endText += NumeroAPalabra(subNum, "mil") + " mil ";
+					subNum = "";
 				}
 
 				if (pos == 6) { //posiciones para los millones
@@ -185,14 +191,14 @@ int main()
 					else {
 						endText += " millones ";
 					}
+					subNum = "";
 				}
-				subNum = "";
-
 			}
+			else if (subNum == "000") subNum = "";
 			subNum += numEntero[i]; //agregar el digito actual a subNum
 		}
 
-		endText = endText + "con " + centavos[0] + centavos[1] + " centavos"; // agregar la parte de los centavos al mensaje final
+		endText = endText + "con " + centavos[0] + centavos[1] + " centavos \n" ; // agregar la parte de los centavos al mensaje final
 		if (endText[0] == ' ') {
 			endText.erase(0, 1);
 		}
