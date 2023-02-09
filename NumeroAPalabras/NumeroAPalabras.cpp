@@ -27,11 +27,16 @@ string NumeroAPalabra(string num, string group) {
 
 		if (i == 0) {
 			if (num[i] == '1' && num[i + 1] == '0' && num[i + 2] == '0') {
-				numeroTexto += centenas[0];
+				return numeroTexto += centenas[0];
 			}
-			else{
+			else if(num[i] == '1'){
 				numeroTexto += centenas[pos] + " ";
 			}
+			else {
+				numeroTexto += centenas[pos] + " ";
+			}
+
+
 		}
 
 		if (i == 1) {
@@ -39,14 +44,14 @@ string NumeroAPalabra(string num, string group) {
 			if (num[i] == '1' && num[i + 1] == '0') {
 				return numeroTexto += diez[0];
 			} else if(num[i] == '1' && num[i+1] != '0'){
-
+				return numeroTexto += diez[int(num[i + 1]) - 48];
 			}
 
 			if (num[i] == '2' && num[i+1] == '1' && group == "centena") {
 				return numeroTexto += veinte[1];
 			}
 			else if (num[i] == '2' && num[i+1] == '1' && group != "centena") {
-				return numeroTexto += veinte[0];
+				return numeroTexto += veinte[0] + " ";
 			}
 			else if (num[i] == '2' && num[i+1] != '0') {
 				return numeroTexto += veinte[int(num[i+1] - 48)];
@@ -72,7 +77,7 @@ string NumeroAPalabra(string num, string group) {
 			else if (num[i] == '1' && group != "centena") {
 				numeroTexto += unidades[pos - 1] + " ";
 			}
-			else {
+			else if(num[i] != '0') {
 				numeroTexto += unidades[pos] + " ";
 			}
 			
@@ -111,21 +116,29 @@ int main()
 		int counter = 0;
 		for (int i = 0; i < strLength + 1; i++) {
 			int pos = strLength - i + 3;
-
 			if (subNum.length() == 3 || i == strLength || counter == 3) {
-				if (pos == 3 || pos == 2 || pos == 1) {
-					endText += NumeroAPalabra(subNum, "centena") + " ";
-					subNum = "";
-				}
+				if (subNum != "000") {
+					if (pos == 3 || pos == 2 || pos == 1) {
+						endText += NumeroAPalabra(subNum, "centena") + " ";
+						subNum = "";
+					}
 
-				if (pos == 6 || pos == 5 || pos == 4) {
-					endText += NumeroAPalabra(subNum, "mil") + "mil ";
-					subNum = "";
-				}
+					if (pos == 6 || pos == 5 || pos == 4) {
+						endText += NumeroAPalabra(subNum, "mil") + "mil ";
+						subNum = "";
+					}
 
-				if (pos == 9 || pos == 8 || pos == 7) {
-					endText += NumeroAPalabra(subNum, "millon") + " ";
-					subNum = "";
+					if (pos == 9 || pos == 8 || pos == 7) {
+						endText += NumeroAPalabra(subNum, "millon");
+						if (subNum[2] == '1') {
+							endText += "millon ";
+						}
+						else {
+							endText += "millones ";
+
+						}
+						subNum = "";
+					}
 				}
 
 			}
