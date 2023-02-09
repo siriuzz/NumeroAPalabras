@@ -35,8 +35,6 @@ string NumeroAPalabra(string num, string group) {
 			else {
 				numeroTexto += centenas[pos] + " ";
 			}
-
-
 		}
 
 		if (i == 1) {
@@ -51,7 +49,7 @@ string NumeroAPalabra(string num, string group) {
 				return numeroTexto += veinte[1];
 			}
 			else if (num[i] == '2' && num[i+1] == '1' && group != "centena") {
-				return numeroTexto += veinte[0] + " ";
+				return numeroTexto += veinte[0];
 			}
 			else if (num[i] == '2' && num[i+1] != '0') {
 				return numeroTexto += veinte[int(num[i+1] - 48)];
@@ -65,20 +63,20 @@ string NumeroAPalabra(string num, string group) {
 				numeroTexto += decenasRestantes[pos - 2] + " y ";
 			}
 			else {
-				return numeroTexto += decenasRestantes[pos-2] + " ";
+				return numeroTexto += decenasRestantes[pos-2];
 			}
 			
 		}
 
 		if (i == 2) {
 			if (group == "centena" && num[i] == '1') {
-				numeroTexto += unidades[pos] + " ";
+				numeroTexto += unidades[pos];
 			}
 			else if (num[i] == '1' && group != "centena") {
-				numeroTexto += unidades[pos - 1] + " ";
+				numeroTexto += unidades[pos - 1];
 			}
 			else if(num[i] != '0') {
-				numeroTexto += unidades[pos] + " ";
+				numeroTexto += unidades[pos];
 			}
 			
 		}
@@ -96,7 +94,7 @@ int main()
 		cin >> num;
 
 		if (num.find('.') != string::npos) {
-			numNoCentavos = num.substr(num.find('.') + 1);
+			numNoCentavos = num.substr(0,num.find('.'));
 		}
 		else {
 			numNoCentavos = num;
@@ -145,39 +143,10 @@ int main()
 			subNum += numNoCentavos[i];
 			counter++;
 		}
-
+		if (num.find('.') == string::npos) num += ".00";
+		endText = endText + "con " + num[num.length() - 2] + num[num.length() - 1];
+		endText += " centavos";
 		cout << endText;
-
-		//for (int i = num.length(); i > -1; i--) {
-		//	if ((i == strLength - 12 || i == strLength - 9 || i == strLength - 6) && num[i] != '0') {
-		//		if (num[i] == '1'&& num[i + 1] == '0' && num[i + 2] == '0') {
-		//			cout << centenas[0];
-		//		}
-		//		int pos = int(num[i]) - 48;
-		//		cout << centenas[pos] << endl;
-		//	}
-
-		//	if ((i == strLength - 11 || i == strLength - 8 || i == strLength - 5) && num[i] != '0') {
-		//		if (num[i] == '2') { // 20.00, 20000.00, 20000000.00
-		//			if (num[i + 1] != 0) {
-		//				if (num[i + 2] != '.') {
-		//					int pos = int(num[i + 1]) - 48;
-		//					cout << veinte[pos] << endl;
-		//				}
-		//				else {
-		//				}
-		//			}
-		//			
-		//		}
-		//		
-		//	}
-
-		//	if ((i == strLength - 10 || i == strLength - 7 || i == strLength - 4) && num[i] != '0') {
-		//		int pos = int(num[i]) - 48;
-		//		cout << unidades[pos] << endl;
-		//	}
-		//}
-
 		break;
 	}
 
